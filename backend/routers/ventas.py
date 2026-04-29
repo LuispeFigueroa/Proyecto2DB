@@ -69,6 +69,8 @@ def get_venta(id_venta: int):
         cur.close()
         conn.close()
 
+
+#transaccion para crear vetnas 
 @router.post("/", status_code=201)
 def crear_venta(v: VentaBase):
     if not v.detalle:
@@ -77,6 +79,9 @@ def crear_venta(v: VentaBase):
     conn = get_connection()
     cur = conn.cursor()
     try:
+        
+        cur.execute("BEGIN")
+        
         if v.fecha:
             cur.execute(
                 "INSERT INTO ventas(fecha, total, id_cliente, id_empleado) VALUES(%s,%s,%s,%s) RETURNING id_venta",
@@ -88,20 +93,31 @@ def crear_venta(v: VentaBase):
                 (total, v.id_cliente, v.id_empleado)
             )
         id_venta = cur.fetchone()[0]
+
         for item in v.detalle:
             cur.execute(
                 "INSERT INTO detalle_venta(cantidad, precio_unitario, id_venta, id_producto) VALUES(%s,%s,%s,%s)",
                 (item.cantidad, item.precio_unitario, id_venta, item.id_producto)
             )
-        conn.commit()
+            # Descontar stock
+            cur.execute(
+                "UPDATE productos SET stock = stock - %s WHERE id_producto = %s AND stock >= %s",
+                (item.cantidad, item.id_producto, item.cantidad)
+            )
+            if cur.rowcount == 0:
+                raise Exception(f"Stock insuficiente para producto {item.id_producto}")
+
+        cur.execute("COMMIT")
         return {"id_venta": id_venta, "total": total, "message": "Venta creada exitosamente"}
     except Exception as e:
-        conn.rollback()
+        cur.execute("ROLLBACK")
         raise HTTPException(status_code=400, detail=str(e))
     finally:
         cur.close()
         conn.close()
 
+
+#delete para borrar ventas por id
 @router.delete("/{id_venta}")
 def eliminar_venta(id_venta: int):
     conn = get_connection()

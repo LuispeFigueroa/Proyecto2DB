@@ -11,10 +11,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(productos.router, prefix="/productos",tags=["Productos"])
-app.include_router(clientes.router, prefix="/clientes",tags=["Clientes"])
-app.include_router(ventas.router, prefix="/ventas",tags=["Ventas"])
-app.include_router(reportes.router, prefix="/reportes",tags=["Reportes"])
+app.include_router(productos.router, prefix="/productos", tags=["Productos"])
+app.include_router(clientes.router, prefix="/clientes", tags=["Clientes"])
+app.include_router(ventas.router, prefix="/ventas", tags=["Ventas"])
+app.include_router(reportes.router, prefix="/reportes", tags=["Reportes"])
 
 @app.get("/")
 def root():
