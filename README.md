@@ -147,6 +147,8 @@ Todas las tablas incluyen al menos 25 registros de prueba. El esquema se inicial
 
 **3FN** — No hay dependencias transitivas. El nombre de la categoria vive en `categorias`, no en `productos`. Lo mismo aplica para proveedor, cliente y empleado. Ningun atributo no-clave depende de otro atributo no-clave.
 
+**Se puede ver el diseno de la base de datos a detalle en el archivo pdf llamado "Diseño de base de datos" aqui se pueden encontrar los diagramas y las justificaciones de la normalizacion con ejemplos especificos.**
+
 ---
 
 ## Endpoints
