@@ -51,6 +51,11 @@ export default function Reportes() {
     const [desde, setDesde] = useState('')
     const [hasta, setHasta] = useState('')
 
+    // Nuevos estados
+    const [vistaVentas, setVistaVentas] = useState([])
+    const [clientesGuitarristas, setClientesGuitarristas] = useState([])
+    const [productosSinVentas, setProductosSinVentas] = useState([])
+
     const load = async (fn) => {
         setLoading(true); setError('')
         try { await fn() } catch { setError('Error al cargar reporte') }
@@ -60,6 +65,9 @@ export default function Reportes() {
     useEffect(() => { load(() => api.get('/reportes/ventas-por-mes').then(r => setVentasMes(r.data))) }, [])
     useEffect(() => { load(() => api.get('/reportes/productos-mas-vendidos').then(r => setTopProductos(r.data))) }, [])
     useEffect(() => { load(() => api.get('/reportes/ventas-por-cliente').then(r => setVentasCliente(r.data))) }, [])
+    useEffect(() => { load(() => api.get('/reportes/vista-ventas').then(r => setVistaVentas(r.data))) }, [])
+    useEffect(() => { load(() => api.get('/reportes/clientes-guitarristas').then(r => setClientesGuitarristas(r.data))) }, [])
+    useEffect(() => { load(() => api.get('/reportes/productos-sin-ventas').then(r => setProductosSinVentas(r.data))) }, [])
 
     const buscarPeriodo = () => {
         if (!desde || !hasta) { setError('Ingresa fecha inicio y fin'); return }
@@ -78,18 +86,27 @@ export default function Reportes() {
 
             {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
-            <Tabs value={tab} onChange={(_, v) => setTab(v)}
-                TabIndicatorProps={{ style: { backgroundColor: '#09814A' } }}>
+            <Tabs
+                value={tab}
+                onChange={(_, v) => setTab(v)}
+                TabIndicatorProps={{ style: { backgroundColor: '#09814A' } }}
+                variant="scrollable"
+                scrollButtons="auto"
+            >
                 <Tab label="Ventas por Mes" sx={tabSx} />
                 <Tab label="Top Productos" sx={tabSx} />
                 <Tab label="Por Cliente" sx={tabSx} />
                 <Tab label="Por Período" sx={tabSx} />
+                <Tab label="Vista Detallada" sx={tabSx} />
+                <Tab label="Clientes Guitarristas" sx={tabSx} />
+                <Tab label="Sin Ventas" sx={tabSx} />
             </Tabs>
 
             {loading && <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}><CircularProgress sx={{ color: '#09814A' }} /></Box>}
 
             {!loading && (
                 <>
+                    {/* Tab 0 - GROUP BY + HAVING */}
                     <TabPanel value={tab} index={0}>
                         <ReportTable
                             keyField="mes"
@@ -102,6 +119,7 @@ export default function Reportes() {
                         />
                     </TabPanel>
 
+                    {/* Tab 1 - CTE */}
                     <TabPanel value={tab} index={1}>
                         <ReportTable
                             keyField="producto"
@@ -116,6 +134,7 @@ export default function Reportes() {
                         />
                     </TabPanel>
 
+                    {/* Tab 2 - JOIN múltiple */}
                     <TabPanel value={tab} index={2}>
                         <ReportTable
                             keyField="cliente"
@@ -128,6 +147,7 @@ export default function Reportes() {
                         />
                     </TabPanel>
 
+                    {/* Tab 3 - JOIN con filtro por periodo */}
                     <TabPanel value={tab} index={3}>
                         <Box sx={{ display: 'flex', gap: 2, mb: 3, alignItems: 'center' }}>
                             <TextField label="Desde" type="date" value={desde}
@@ -156,6 +176,61 @@ export default function Reportes() {
                                 rows={ventasPeriodo}
                             />
                         )}
+                    </TabPanel>
+
+                    {/* Tab 4 - VIEW */}
+                    <TabPanel value={tab} index={4}>
+                        <Typography variant="body2" sx={{ color: '#ABA9C3', mb: 2 }}>
+                            Datos obtenidos desde la vista <code>vista_ventas_detalladas</code>
+                        </Typography>
+                        <ReportTable
+                            keyField="id_venta"
+                            columns={[
+                                { key: 'id_venta', label: 'ID Venta' },
+                                { key: 'fecha', label: 'Fecha' },
+                                { key: 'cliente', label: 'Cliente' },
+                                { key: 'empleado', label: 'Empleado' },
+                                { key: 'producto', label: 'Producto' },
+                                { key: 'cantidad', label: 'Cant.' },
+                                { key: 'precio_unitario', label: 'Precio Unit.', format: q },
+                                { key: 'subtotal', label: 'Subtotal', highlight: true, format: q },
+                            ]}
+                            rows={vistaVentas}
+                        />
+                    </TabPanel>
+
+                    {/* Tab 5 - Subquery IN */}
+                    <TabPanel value={tab} index={5}>
+                        <Typography variant="body2" sx={{ color: '#ABA9C3', mb: 2 }}>
+                            Clientes que han comprado guitarras — consulta con subquery <code>IN</code>
+                        </Typography>
+                        <ReportTable
+                            keyField="id_cliente"
+                            columns={[
+                                { key: 'id_cliente', label: 'ID' },
+                                { key: 'nombre', label: 'Cliente' },
+                                { key: 'email', label: 'Email' },
+                                { key: 'telefono', label: 'Teléfono' },
+                            ]}
+                            rows={clientesGuitarristas}
+                        />
+                    </TabPanel>
+
+                    {/* Tab 6 - Subquery EXISTS */}
+                    <TabPanel value={tab} index={6}>
+                        <Typography variant="body2" sx={{ color: '#ABA9C3', mb: 2 }}>
+                            Productos que nunca han sido vendidos — consulta con <code>NOT EXISTS</code>
+                        </Typography>
+                        <ReportTable
+                            keyField="id_producto"
+                            columns={[
+                                { key: 'id_producto', label: 'ID' },
+                                { key: 'nombre', label: 'Producto' },
+                                { key: 'precio', label: 'Precio', highlight: true, format: q },
+                                { key: 'stock', label: 'Stock' },
+                            ]}
+                            rows={productosSinVentas}
+                        />
                     </TabPanel>
                 </>
             )}

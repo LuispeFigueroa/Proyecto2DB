@@ -5,6 +5,7 @@ import Productos from './pages/Productos'
 import Clientes from './pages/Clientes'
 import Ventas from './pages/Ventas'
 import Reportes from './pages/Reportes'
+import Home from './pages/Home'
 
 export default function App() {
   return (
@@ -12,7 +13,7 @@ export default function App() {
       <Navbar />
       <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }}>
         <Routes>
-          <Route path="/" element={<Productos />} />
+          <Route path="/" element={<Home />} />
           <Route path="/productos" element={<Productos />} />
           <Route path="/clientes" element={<Clientes />} />
           <Route path="/ventas" element={<Ventas />} />
