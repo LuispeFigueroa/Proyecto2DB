@@ -4,30 +4,21 @@ const theme = createTheme({
     palette: {
         mode: 'light',
         background: {
-            default: '#DEE5E5',
+            default: '#F5F6F8',
             paper: '#ffffff',
         },
         primary: {
-            main: '#53131E',
-            dark: '#3d0e16',
-            contrastText: '#ffffff',
+            main: '#42273B',
         },
         secondary: {
-            main: '#CC8B86',
-        },
-        warning: {
-            main: '#F6AE2D',
-            contrastText: '#53131E',
+            main: '#6C8EAD',
         },
         error: {
-            main: '#C62828',
-        },
-        success: {
-            main: '#2e7d32',
+            main: '#DE3C4B',
         },
         text: {
-            primary: '#53131E',
-            secondary: '#5B616A',
+            primary: '#42273B',
+            secondary: '#64748B',
         },
     },
     typography: {
@@ -36,91 +27,39 @@ const theme = createTheme({
     components: {
         MuiAppBar: {
             styleOverrides: {
-                root: ({ theme }) => ({
-                    backgroundColor: theme.palette.primary.main,
-                    borderBottom: `1px solid ${theme.palette.secondary.main}`,
-                }),
+                root: {
+                    backgroundColor: '#6C8EAD',
+                    borderBottom: '1px solid #5a7a9a',
+                    boxShadow: 'none',
+                },
             },
         },
         MuiButton: {
             styleOverrides: {
-                root: { borderRadius: 8 },
-                containedPrimary: ({ theme }) => ({
-                    backgroundColor: theme.palette.primary.main,
-                    '&:hover': { backgroundColor: theme.palette.primary.dark },
-                }),
+                root: { borderRadius: 8, textTransform: 'none' },
+                containedPrimary: {
+                    backgroundColor: '#42273B',
+                    '&:hover': { backgroundColor: '#2e1a28' },
+                },
             },
         },
         MuiPaper: {
             styleOverrides: {
-                root: { backgroundImage: 'none' },
+                root: {
+                    backgroundImage: 'none',
+                    backgroundColor: '#ffffff',
+                },
             },
         },
         MuiTableCell: {
             styleOverrides: {
-                root: ({ theme }) => ({
-                    borderColor: theme.palette.background.default,
-                }),
-                head: ({ theme }) => ({
-                    color: theme.palette.text.secondary,
-                    fontWeight: 600,
-                    borderBottom: `1px solid ${theme.palette.secondary.main}`,
-                }),
+                root: { borderColor: '#E2E8F0' },
+                head: { color: '#64748B', fontWeight: 500, fontSize: 12 },
             },
         },
-        MuiOutlinedInput: {
+        MuiChip: {
             styleOverrides: {
-                root: ({ theme }) => ({
-                    '&:hover .MuiOutlinedInput-notchedOutline': {
-                        borderColor: theme.palette.primary.main,
-                    },
-                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                        borderColor: theme.palette.primary.main,
-                    },
-                }),
-            },
-        },
-        MuiInputLabel: {
-            styleOverrides: {
-                root: ({ theme }) => ({
-                    '&.Mui-focused': { color: theme.palette.primary.main },
-                }),
-            },
-        },
-        MuiTabs: {
-            styleOverrides: {
-                indicator: ({ theme }) => ({
-                    backgroundColor: theme.palette.primary.main,
-                }),
-            },
-        },
-        MuiTab: {
-            styleOverrides: {
-                root: ({ theme }) => ({
-                    color: theme.palette.text.secondary,
-                    '&.Mui-selected': { color: theme.palette.primary.main },
-                }),
-            },
-        },
-        MuiCircularProgress: {
-            styleOverrides: {
-                root: ({ theme }) => ({
-                    color: theme.palette.primary.main,
-                }),
-            },
-        },
-        MuiDivider: {
-            styleOverrides: {
-                root: ({ theme }) => ({
-                    borderColor: theme.palette.secondary.main,
-                }),
-            },
-        },
-        MuiIconButton: {
-            styleOverrides: {
-                root: ({ theme }) => ({
-                    color: theme.palette.text.secondary,
-                }),
+                root: { borderRadius: 6 },
             },
         },
     },

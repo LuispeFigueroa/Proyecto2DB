@@ -18,36 +18,36 @@ export default function Home() {
     const actions = [
         {
             label: 'Nueva venta',
-            color: '#53131E',
-            bg: alpha('#53131E', 0.08),
-            border: alpha('#53131E', 0.3),
+            color: '#F6AE2D',
+            bg: '#F6AE2D18',
+            border: '#F6AE2D',
             path: '/ventas',
             icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="#53131E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width={40} height={40}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="#F6AE2D" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width={36} height={36}>
                     <path d="M12 5v14M5 12h14" />
                 </svg>
             )
         },
         {
             label: 'Inventario',
-            color: '#F6AE2D',
-            bg: alpha('#F6AE2D', 0.15),
-            border: alpha('#F6AE2D', 0.4),
+            color: '#CC8B86',
+            bg: '#CC8B8618',
+            border: 'transparent',
             path: '/productos',
             icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="#F6AE2D" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width={40} height={40}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="#CC8B86" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width={36} height={36}>
                     <path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2zM16 3H8L6 7h12l-2-4z" />
                 </svg>
             )
         },
         {
             label: 'Reportes',
-            color: '#CC8B86',
-            bg: alpha('#CC8B86', 0.12),
-            border: alpha('#CC8B86', 0.35),
+            color: '#6C8EAD',
+            bg: '#6C8EAD18',
+            border: 'transparent',
             path: '/reportes',
             icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="#CC8B86" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width={40} height={40}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="#6C8EAD" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width={36} height={36}>
                     <path d="M3 3h18v18H3zM3 9h18M9 21V9" />
                 </svg>
             )

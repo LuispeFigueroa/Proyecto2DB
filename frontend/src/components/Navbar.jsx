@@ -34,8 +34,12 @@ export default function Navbar() {
                             to={link.to}
                             startIcon={link.icon || null}
                             sx={{
-                                color: location.pathname === link.to ? 'secondary.main' : 'rgba(255,255,255,0.75)',
-                                '&:hover': { color: 'common.white', bgcolor: 'rgba(255,255,255,0.12)' },
+                                color: 'common.white',
+                                fontWeight: location.pathname === link.to ? 700 : 400,
+                                borderBottom: location.pathname === link.to ? '2px solid rgba(255,255,255,0.8)' : '2px solid transparent',
+                                borderRadius: 0,
+                                opacity: location.pathname === link.to ? 1 : 0.75,
+                                '&:hover': { opacity: 1, bgcolor: 'rgba(255,255,255,0.12)' },
                             }}
                         >
                             {link.label}
