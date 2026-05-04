@@ -4,6 +4,8 @@ Aplicación web para gestionar el inventario y ventas de una tienda de instrumen
 
 Desarrollada con React, FastAPI y PostgreSQL. Desplegada mediante Docker.
 
+**README y parte de la documentacion fueron asistidas por IA**
+
 ---
 
 ## Stack
