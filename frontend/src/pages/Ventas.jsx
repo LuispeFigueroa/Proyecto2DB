@@ -94,29 +94,28 @@ export default function Ventas() {
         }
     }
 
-    const fieldSx = {
-        '& .MuiOutlinedInput-root': { color: '#FFFBDB', '& fieldset': { borderColor: '#ABA9C3' }, '&:hover fieldset': { borderColor: '#09814A' } },
-        '& .MuiInputLabel-root': { color: '#ABA9C3' },
-    }
-
     return (
         <Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-                <Typography variant="h5" sx={{ color: '#FFFBDB', fontWeight: 700 }}>
-                    Ventas
-                </Typography>
-                <Button variant="contained" startIcon={<AddIcon />} onClick={() => setOpenCreate(true)}
-                    sx={{ bgcolor: '#09814A', '&:hover': { bgcolor: '#076e3e' } }}>
+                <Box>
+                    <Typography variant="h5" sx={{ color: 'text.primary', fontWeight: 700 }}>
+                        Ventas
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: 'secondary.main', fontWeight: 500 }}>
+                        {ventas.length} ventas registradas
+                    </Typography>
+                </Box>
+                <Button variant="contained" startIcon={<AddIcon />} onClick={() => setOpenCreate(true)}>
                     Nueva Venta
                 </Button>
             </Box>
 
-            <TableContainer component={Paper} sx={{ bgcolor: '#1a1e22' }}>
+            <TableContainer component={Paper} elevation={0} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2 }}>
                 <Table>
                     <TableHead>
                         <TableRow>
                             {['ID', 'Fecha', 'Cliente', 'Empleado', 'Total', 'Acciones'].map(h => (
-                                <TableCell key={h} sx={{ color: '#ABA9C3', fontWeight: 700, borderBottom: '1px solid #09814A' }}>
+                                <TableCell key={h} sx={{ fontWeight: 700 }}>
                                     {h}
                                 </TableCell>
                             ))}
@@ -124,19 +123,19 @@ export default function Ventas() {
                     </TableHead>
                     <TableBody>
                         {ventas.map(v => (
-                            <TableRow key={v.id_venta} sx={{ '&:hover': { bgcolor: '#1f2428' } }}>
-                                <TableCell sx={{ color: '#ABA9C3' }}>{v.id_venta}</TableCell>
-                                <TableCell sx={{ color: '#ABA9C3' }}>{v.fecha}</TableCell>
-                                <TableCell sx={{ color: '#FFFBDB' }}>{v.cliente}</TableCell>
-                                <TableCell sx={{ color: '#ABA9C3' }}>{v.empleado}</TableCell>
-                                <TableCell sx={{ color: '#DA7422', fontWeight: 700 }}>
+                            <TableRow key={v.id_venta} sx={{ '&:hover': { bgcolor: 'action.hover' } }}>
+                                <TableCell>{v.id_venta}</TableCell>
+                                <TableCell>{v.fecha}</TableCell>
+                                <TableCell sx={{ color: 'text.primary', fontWeight: 500 }}>{v.cliente}</TableCell>
+                                <TableCell>{v.empleado}</TableCell>
+                                <TableCell sx={{ color: 'warning.main', fontWeight: 700 }}>
                                     Q{parseFloat(v.total).toFixed(2)}
                                 </TableCell>
                                 <TableCell>
-                                    <IconButton onClick={() => handleVerDetalle(v.id_venta)} sx={{ color: '#ABA9C3', '&:hover': { color: '#09814A' } }}>
+                                    <IconButton onClick={() => handleVerDetalle(v.id_venta)} sx={{ '&:hover': { color: 'primary.main' } }}>
                                         <VisibilityIcon fontSize="small" />
                                     </IconButton>
-                                    <IconButton onClick={() => handleDelete(v.id_venta)} sx={{ color: '#ABA9C3', '&:hover': { color: '#DA7422' } }}>
+                                    <IconButton onClick={() => handleDelete(v.id_venta)} sx={{ '&:hover': { color: 'error.main' } }}>
                                         <DeleteIcon fontSize="small" />
                                     </IconButton>
                                 </TableCell>
@@ -147,9 +146,8 @@ export default function Ventas() {
             </TableContainer>
 
             {/* Dialog detalle */}
-            <Dialog open={openDetail} onClose={() => setOpenDetail(false)} maxWidth="md" fullWidth
-                PaperProps={{ sx: { bgcolor: '#1a1e22' } }}>
-                <DialogTitle sx={{ color: '#FFFBDB' }}>
+            <Dialog open={openDetail} onClose={() => setOpenDetail(false)} maxWidth="md" fullWidth>
+                <DialogTitle>
                     Detalle de Venta #{detalle?.id_venta}
                 </DialogTitle>
                 <DialogContent>
@@ -163,27 +161,27 @@ export default function Ventas() {
                                     ['Total', `Q${parseFloat(detalle.total).toFixed(2)}`],
                                 ].map(([label, val]) => (
                                     <Box key={label}>
-                                        <Typography variant="caption" sx={{ color: '#ABA9C3' }}>{label}</Typography>
-                                        <Typography sx={{ color: '#FFFBDB' }}>{val}</Typography>
+                                        <Typography variant="caption" sx={{ color: 'text.secondary' }}>{label}</Typography>
+                                        <Typography sx={{ color: 'text.primary' }}>{val}</Typography>
                                     </Box>
                                 ))}
                             </Box>
-                            <Divider sx={{ borderColor: '#09814A', mb: 2 }} />
+                            <Divider sx={{ mb: 2 }} />
                             <Table size="small">
                                 <TableHead>
                                     <TableRow>
                                         {['Producto', 'Cantidad', 'Precio Unit.', 'Subtotal'].map(h => (
-                                            <TableCell key={h} sx={{ color: '#ABA9C3', borderBottom: '1px solid #333' }}>{h}</TableCell>
+                                            <TableCell key={h} sx={{ fontWeight: 600 }}>{h}</TableCell>
                                         ))}
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {detalle.detalle?.map((d, i) => (
                                         <TableRow key={i}>
-                                            <TableCell sx={{ color: '#FFFBDB' }}>{d.producto}</TableCell>
-                                            <TableCell sx={{ color: '#ABA9C3' }}>{d.cantidad}</TableCell>
-                                            <TableCell sx={{ color: '#ABA9C3' }}>Q{parseFloat(d.precio_unitario).toFixed(2)}</TableCell>
-                                            <TableCell sx={{ color: '#DA7422' }}>Q{parseFloat(d.subtotal).toFixed(2)}</TableCell>
+                                            <TableCell sx={{ color: 'text.primary' }}>{d.producto}</TableCell>
+                                            <TableCell>{d.cantidad}</TableCell>
+                                            <TableCell>Q{parseFloat(d.precio_unitario).toFixed(2)}</TableCell>
+                                            <TableCell sx={{ color: 'warning.main', fontWeight: 500 }}>Q{parseFloat(d.subtotal).toFixed(2)}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -192,56 +190,54 @@ export default function Ventas() {
                     )}
                 </DialogContent>
                 <DialogActions sx={{ p: 2 }}>
-                    <Button onClick={() => setOpenDetail(false)} sx={{ color: '#ABA9C3' }}>Cerrar</Button>
+                    <Button onClick={() => setOpenDetail(false)} sx={{ color: 'text.secondary' }}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
 
             {/* Dialog crear venta */}
-            <Dialog open={openCreate} onClose={() => { setOpenCreate(false); setError('') }}
-                maxWidth="sm" fullWidth PaperProps={{ sx: { bgcolor: '#1a1e22' } }}>
-                <DialogTitle sx={{ color: '#FFFBDB' }}>Nueva Venta</DialogTitle>
+            <Dialog open={openCreate} onClose={() => { setOpenCreate(false); setError('') }} maxWidth="sm" fullWidth>
+                <DialogTitle>Nueva Venta</DialogTitle>
                 <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 2 }}>
                     {error && <Alert severity="error">{error}</Alert>}
                     <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
                         <TextField label="ID Cliente *" type="number" value={form.id_cliente}
                             onChange={e => setForm({ ...form, id_cliente: e.target.value })}
-                            variant="outlined" size="small" sx={fieldSx} />
+                            variant="outlined" size="small" />
                         <TextField label="ID Empleado *" type="number" value={form.id_empleado}
                             onChange={e => setForm({ ...form, id_empleado: e.target.value })}
-                            variant="outlined" size="small" sx={fieldSx} />
+                            variant="outlined" size="small" />
                     </Box>
                     <TextField label="Fecha (opcional)" type="date" value={form.fecha}
                         onChange={e => setForm({ ...form, fecha: e.target.value })}
-                        variant="outlined" size="small" InputLabelProps={{ shrink: true }} sx={fieldSx} />
+                        variant="outlined" size="small" InputLabelProps={{ shrink: true }} />
 
-                    <Divider sx={{ borderColor: '#09814A' }} />
-                    <Typography sx={{ color: '#ABA9C3', fontSize: 14 }}>Productos</Typography>
+                    <Divider />
+                    <Typography sx={{ color: 'text.secondary', fontSize: 14 }}>Productos</Typography>
 
                     {items.map((item, i) => (
                         <Box key={i} sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr auto', gap: 1, alignItems: 'center' }}>
                             <TextField label="ID Producto" type="number" value={item.id_producto}
                                 onChange={e => handleItemChange(i, 'id_producto', e.target.value)}
-                                variant="outlined" size="small" sx={fieldSx} />
+                                variant="outlined" size="small" />
                             <TextField label="Cantidad" type="number" value={item.cantidad}
                                 onChange={e => handleItemChange(i, 'cantidad', e.target.value)}
-                                variant="outlined" size="small" sx={fieldSx} />
+                                variant="outlined" size="small" />
                             <TextField label="Precio Unit." type="number" value={item.precio_unitario}
                                 onChange={e => handleItemChange(i, 'precio_unitario', e.target.value)}
-                                variant="outlined" size="small" sx={fieldSx} />
+                                variant="outlined" size="small" />
                             <IconButton onClick={() => removeItem(i)} disabled={items.length === 1}
-                                sx={{ color: '#DA7422' }}>
+                                sx={{ color: 'error.main' }}>
                                 <DeleteIcon fontSize="small" />
                             </IconButton>
                         </Box>
                     ))}
-                    <Button onClick={addItem} size="small" sx={{ color: '#09814A', alignSelf: 'flex-start' }}>
+                    <Button onClick={addItem} size="small" sx={{ color: 'primary.main', alignSelf: 'flex-start' }}>
                         + Agregar producto
                     </Button>
                 </DialogContent>
                 <DialogActions sx={{ p: 2 }}>
-                    <Button onClick={() => { setOpenCreate(false); setError('') }} sx={{ color: '#ABA9C3' }}>Cancelar</Button>
-                    <Button onClick={handleSubmit} variant="contained"
-                        sx={{ bgcolor: '#09814A', '&:hover': { bgcolor: '#076e3e' } }}>
+                    <Button onClick={() => { setOpenCreate(false); setError('') }} sx={{ color: 'text.secondary' }}>Cancelar</Button>
+                    <Button onClick={handleSubmit} variant="contained">
                         Crear Venta
                     </Button>
                 </DialogActions>

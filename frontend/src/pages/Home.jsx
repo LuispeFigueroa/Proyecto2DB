@@ -4,6 +4,7 @@ import {
     Box, Typography, Grid, Paper, Table, TableBody,
     TableCell, TableContainer, TableHead, TableRow
 } from '@mui/material'
+import { alpha } from '@mui/material/styles'
 import api from '../api/axios'
 
 export default function Home() {
@@ -17,36 +18,36 @@ export default function Home() {
     const actions = [
         {
             label: 'Nueva venta',
-            color: '#09814A',
-            bg: '#09814A20',
-            border: '#09814A',
+            color: '#53131E',
+            bg: alpha('#53131E', 0.08),
+            border: alpha('#53131E', 0.3),
             path: '/ventas',
             icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="#09814A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width={28} height={28}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="#53131E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width={40} height={40}>
                     <path d="M12 5v14M5 12h14" />
                 </svg>
             )
         },
         {
             label: 'Inventario',
-            color: '#DA7422',
-            bg: '#DA742220',
-            border: 'transparent',
+            color: '#F6AE2D',
+            bg: alpha('#F6AE2D', 0.15),
+            border: alpha('#F6AE2D', 0.4),
             path: '/productos',
             icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="#DA7422" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width={28} height={28}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="#F6AE2D" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width={40} height={40}>
                     <path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2zM16 3H8L6 7h12l-2-4z" />
                 </svg>
             )
         },
         {
             label: 'Reportes',
-            color: '#ABA9C3',
-            bg: '#ABA9C320',
-            border: 'transparent',
+            color: '#CC8B86',
+            bg: alpha('#CC8B86', 0.12),
+            border: alpha('#CC8B86', 0.35),
             path: '/reportes',
             icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="#ABA9C3" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width={28} height={28}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="#CC8B86" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width={40} height={40}>
                     <path d="M3 3h18v18H3zM3 9h18M9 21V9" />
                 </svg>
             )
@@ -55,11 +56,11 @@ export default function Home() {
 
     return (
         <Box>
-            <Typography variant="h5" sx={{ color: '#FFFBDB', fontWeight: 500, mb: 0.5 }}>
-                Bienvendio
+            <Typography variant="h5" sx={{ color: 'text.primary', fontWeight: 600, mb: 0.25 }}>
+                Bienvenido
             </Typography>
-            <Typography variant="body2" sx={{ color: '#ABA9C3', mb: 3 }}>
-                Tienda Musical  LP
+            <Typography variant="body2" sx={{ color: 'secondary.main', fontWeight: 500, mb: 3 }}>
+                Tienda Musical LP
             </Typography>
 
             {/* Botones de acción */}
@@ -68,25 +69,26 @@ export default function Home() {
                     <Grid item xs={4} key={action.label}>
                         <Paper
                             onClick={() => navigate(action.path)}
+                            elevation={0}
                             sx={{
-                                bgcolor: '#1a1e22',
-                                border: `0.5px solid ${action.border}`,
+                                border: `1px solid ${action.border}`,
                                 borderRadius: 3,
-                                p: 4,
+                                p: 5,
                                 display: 'flex',
                                 flexDirection: 'column',
                                 alignItems: 'center',
                                 gap: 2,
                                 cursor: 'pointer',
-                                transition: 'all 0.15s',
+                                transition: 'all 0.18s',
                                 '&:hover': {
-                                    bgcolor: '#1f2428',
+                                    boxShadow: `0 4px 16px ${alpha(action.color, 0.18)}`,
                                     borderColor: action.color,
+                                    transform: 'translateY(-2px)',
                                 }
                             }}
                         >
                             <Box sx={{
-                                width: 56, height: 56,
+                                width: 72, height: 72,
                                 borderRadius: 2,
                                 bgcolor: action.bg,
                                 display: 'flex',
@@ -95,7 +97,7 @@ export default function Home() {
                             }}>
                                 {action.icon}
                             </Box>
-                            <Typography sx={{ color: '#FFFBDB', fontWeight: 500, fontSize: 15 }}>
+                            <Typography sx={{ color: 'text.primary', fontWeight: 500, fontSize: 17 }}>
                                 {action.label}
                             </Typography>
                         </Paper>
@@ -104,24 +106,27 @@ export default function Home() {
             </Grid>
 
             {/* Tabla de actividad reciente */}
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
-                <Typography sx={{ color: '#FFFBDB', fontWeight: 500, fontSize: 14 }}>
+            <Box sx={{
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                mb: 1.5, pl: 1.5, borderLeft: '3px solid', borderColor: 'secondary.main'
+            }}>
+                <Typography sx={{ color: 'text.primary', fontWeight: 600, fontSize: 14 }}>
                     Actividad reciente
                 </Typography>
                 <Typography
                     onClick={() => navigate('/ventas')}
-                    sx={{ color: '#ABA9C3', fontSize: 12, cursor: 'pointer', '&:hover': { color: '#09814A' } }}
+                    sx={{ color: 'secondary.main', fontSize: 12, cursor: 'pointer', fontWeight: 500, '&:hover': { color: 'primary.main' } }}
                 >
                     Ver todas →
                 </Typography>
             </Box>
 
-            <TableContainer component={Paper} sx={{ bgcolor: '#1a1e22' }}>
+            <TableContainer component={Paper} elevation={0} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2 }}>
                 <Table size="small">
                     <TableHead>
                         <TableRow>
                             {['#', 'Cliente', 'Empleado', 'Fecha', 'Total'].map(h => (
-                                <TableCell key={h} sx={{ color: '#ABA9C3', fontWeight: 500, fontSize: 12, borderBottom: '0.5px solid #09814A40' }}>
+                                <TableCell key={h} sx={{ fontSize: 12 }}>
                                     {h}
                                 </TableCell>
                             ))}
@@ -129,12 +134,12 @@ export default function Home() {
                     </TableHead>
                     <TableBody>
                         {ventas.map(v => (
-                            <TableRow key={v.id_venta} sx={{ '&:hover': { bgcolor: '#1f2428' } }}>
-                                <TableCell sx={{ color: '#ABA9C3', fontSize: 13 }}>{String(v.id_venta).padStart(3, '0')}</TableCell>
-                                <TableCell sx={{ color: '#FFFBDB', fontSize: 13 }}>{v.cliente}</TableCell>
-                                <TableCell sx={{ color: '#ABA9C3', fontSize: 13 }}>{v.empleado}</TableCell>
-                                <TableCell sx={{ color: '#ABA9C3', fontSize: 13 }}>{v.fecha}</TableCell>
-                                <TableCell sx={{ color: '#09814A', fontWeight: 500, fontSize: 13 }}>
+                            <TableRow key={v.id_venta} sx={{ '&:hover': { bgcolor: 'action.hover' } }}>
+                                <TableCell sx={{ color: 'text.secondary', fontSize: 12 }}>{String(v.id_venta).padStart(3, '0')}</TableCell>
+                                <TableCell sx={{ color: 'text.primary', fontWeight: 500 }}>{v.cliente}</TableCell>
+                                <TableCell>{v.empleado}</TableCell>
+                                <TableCell>{v.fecha}</TableCell>
+                                <TableCell sx={{ color: 'warning.main', fontWeight: 600, fontSize: 13 }}>
                                     Q{parseFloat(v.total).toFixed(2)}
                                 </TableCell>
                             </TableRow>

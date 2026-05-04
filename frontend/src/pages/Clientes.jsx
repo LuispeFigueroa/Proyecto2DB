@@ -81,21 +81,25 @@ export default function Clientes() {
     return (
         <Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-                <Typography variant="h5" sx={{ color: '#FFFBDB', fontWeight: 700 }}>
-                    Clientes
-                </Typography>
-                <Button variant="contained" startIcon={<AddIcon />} onClick={() => handleOpen()}
-                    sx={{ bgcolor: '#09814A', '&:hover': { bgcolor: '#076e3e' } }}>
+                <Box>
+                    <Typography variant="h5" sx={{ color: 'text.primary', fontWeight: 700 }}>
+                        Clientes
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: 'secondary.main', fontWeight: 500 }}>
+                        {clientes.length} clientes registrados
+                    </Typography>
+                </Box>
+                <Button variant="contained" startIcon={<AddIcon />} onClick={() => handleOpen()}>
                     Nuevo Cliente
                 </Button>
             </Box>
 
-            <TableContainer component={Paper} sx={{ bgcolor: '#1a1e22' }}>
+            <TableContainer component={Paper} elevation={0} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2 }}>
                 <Table>
                     <TableHead>
                         <TableRow>
                             {['ID', 'Nombre', 'Email', 'Teléfono', 'Dirección', 'Acciones'].map(h => (
-                                <TableCell key={h} sx={{ color: '#ABA9C3', fontWeight: 700, borderBottom: '1px solid #09814A' }}>
+                                <TableCell key={h} sx={{ fontWeight: 700 }}>
                                     {h}
                                 </TableCell>
                             ))}
@@ -103,17 +107,17 @@ export default function Clientes() {
                     </TableHead>
                     <TableBody>
                         {clientes.map(c => (
-                            <TableRow key={c.id_cliente} sx={{ '&:hover': { bgcolor: '#1f2428' } }}>
-                                <TableCell sx={{ color: '#ABA9C3' }}>{c.id_cliente}</TableCell>
-                                <TableCell sx={{ color: '#FFFBDB' }}>{c.nombre}</TableCell>
-                                <TableCell sx={{ color: '#ABA9C3' }}>{c.email}</TableCell>
-                                <TableCell sx={{ color: '#ABA9C3' }}>{c.telefono}</TableCell>
-                                <TableCell sx={{ color: '#ABA9C3' }}>{c.direccion}</TableCell>
+                            <TableRow key={c.id_cliente} sx={{ '&:hover': { bgcolor: 'action.hover' } }}>
+                                <TableCell>{c.id_cliente}</TableCell>
+                                <TableCell sx={{ color: 'text.primary', fontWeight: 500 }}>{c.nombre}</TableCell>
+                                <TableCell>{c.email}</TableCell>
+                                <TableCell>{c.telefono}</TableCell>
+                                <TableCell>{c.direccion}</TableCell>
                                 <TableCell>
-                                    <IconButton onClick={() => handleOpen(c)} sx={{ color: '#ABA9C3', '&:hover': { color: '#09814A' } }}>
+                                    <IconButton onClick={() => handleOpen(c)} sx={{ '&:hover': { color: 'primary.main' } }}>
                                         <EditIcon fontSize="small" />
                                     </IconButton>
-                                    <IconButton onClick={() => handleDelete(c.id_cliente)} sx={{ color: '#ABA9C3', '&:hover': { color: '#DA7422' } }}>
+                                    <IconButton onClick={() => handleDelete(c.id_cliente)} sx={{ '&:hover': { color: 'error.main' } }}>
                                         <DeleteIcon fontSize="small" />
                                     </IconButton>
                                 </TableCell>
@@ -123,8 +127,8 @@ export default function Clientes() {
                 </Table>
             </TableContainer>
 
-            <Dialog open={open} onClose={handleClose} PaperProps={{ sx: { bgcolor: '#1a1e22', minWidth: 400 } }}>
-                <DialogTitle sx={{ color: '#FFFBDB' }}>
+            <Dialog open={open} onClose={handleClose} PaperProps={{ sx: { minWidth: 400 } }}>
+                <DialogTitle>
                     {editing ? 'Editar Cliente' : 'Nuevo Cliente'}
                 </DialogTitle>
                 <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 2 }}>
@@ -143,17 +147,12 @@ export default function Clientes() {
                             onChange={handleChange}
                             variant="outlined"
                             size="small"
-                            sx={{
-                                '& .MuiOutlinedInput-root': { color: '#FFFBDB', '& fieldset': { borderColor: '#ABA9C3' }, '&:hover fieldset': { borderColor: '#09814A' } },
-                                '& .MuiInputLabel-root': { color: '#ABA9C3' },
-                            }}
                         />
                     ))}
                 </DialogContent>
                 <DialogActions sx={{ p: 2 }}>
-                    <Button onClick={handleClose} sx={{ color: '#ABA9C3' }}>Cancelar</Button>
-                    <Button onClick={handleSubmit} variant="contained"
-                        sx={{ bgcolor: '#09814A', '&:hover': { bgcolor: '#076e3e' } }}>
+                    <Button onClick={handleClose} sx={{ color: 'text.secondary' }}>Cancelar</Button>
+                    <Button onClick={handleSubmit} variant="contained">
                         {editing ? 'Actualizar' : 'Crear'}
                     </Button>
                 </DialogActions>

@@ -12,12 +12,12 @@ function TabPanel({ value, index, children }) {
 
 function ReportTable({ columns, rows, keyField }) {
     return (
-        <TableContainer component={Paper} sx={{ bgcolor: '#1a1e22' }}>
+        <TableContainer component={Paper} elevation={0} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2 }}>
             <Table size="small">
                 <TableHead>
                     <TableRow>
                         {columns.map(col => (
-                            <TableCell key={col.key} sx={{ color: '#ABA9C3', fontWeight: 700, borderBottom: '1px solid #09814A' }}>
+                            <TableCell key={col.key} sx={{ fontWeight: 700 }}>
                                 {col.label}
                             </TableCell>
                         ))}
@@ -25,9 +25,9 @@ function ReportTable({ columns, rows, keyField }) {
                 </TableHead>
                 <TableBody>
                     {rows.map((row, i) => (
-                        <TableRow key={row[keyField] ?? i} sx={{ '&:hover': { bgcolor: '#1f2428' } }}>
+                        <TableRow key={row[keyField] ?? i} sx={{ '&:hover': { bgcolor: 'action.hover' } }}>
                             {columns.map(col => (
-                                <TableCell key={col.key} sx={{ color: col.highlight ? '#DA7422' : '#ABA9C3' }}>
+                                <TableCell key={col.key} sx={col.highlight ? { color: 'warning.main', fontWeight: 500 } : undefined}>
                                     {col.format ? col.format(row[col.key]) : row[col.key]}
                                 </TableCell>
                             ))}
@@ -51,7 +51,6 @@ export default function Reportes() {
     const [desde, setDesde] = useState('')
     const [hasta, setHasta] = useState('')
 
-    // Nuevos estados
     const [vistaVentas, setVistaVentas] = useState([])
     const [clientesGuitarristas, setClientesGuitarristas] = useState([])
     const [productosSinVentas, setProductosSinVentas] = useState([])
@@ -76,37 +75,33 @@ export default function Reportes() {
 
     const q = val => `Q${parseFloat(val || 0).toFixed(2)}`
 
-    const tabSx = { color: '#ABA9C3', '&.Mui-selected': { color: '#09814A' } }
-
     return (
         <Box>
-            <Typography variant="h5" sx={{ color: '#FFFBDB', fontWeight: 700, mb: 3 }}>
-                Reportes
-            </Typography>
+            <Box sx={{ mb: 3 }}>
+                <Typography variant="h5" sx={{ color: 'text.primary', fontWeight: 700 }}>
+                    Reportes
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'secondary.main', fontWeight: 500 }}>
+                    Análisis y estadísticas de la tienda
+                </Typography>
+            </Box>
 
             {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
-            <Tabs
-                value={tab}
-                onChange={(_, v) => setTab(v)}
-                TabIndicatorProps={{ style: { backgroundColor: '#09814A' } }}
-                variant="scrollable"
-                scrollButtons="auto"
-            >
-                <Tab label="Ventas por Mes" sx={tabSx} />
-                <Tab label="Top Productos" sx={tabSx} />
-                <Tab label="Por Cliente" sx={tabSx} />
-                <Tab label="Por Período" sx={tabSx} />
-                <Tab label="Vista Detallada" sx={tabSx} />
-                <Tab label="Clientes Guitarristas" sx={tabSx} />
-                <Tab label="Sin Ventas" sx={tabSx} />
+            <Tabs value={tab} onChange={(_, v) => setTab(v)} variant="scrollable" scrollButtons="auto">
+                <Tab label="Ventas por Mes" />
+                <Tab label="Top Productos" />
+                <Tab label="Por Cliente" />
+                <Tab label="Por Período" />
+                <Tab label="Vista Detallada" />
+                <Tab label="Clientes Guitarristas" />
+                <Tab label="Sin Ventas" />
             </Tabs>
 
-            {loading && <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}><CircularProgress sx={{ color: '#09814A' }} /></Box>}
+            {loading && <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}><CircularProgress /></Box>}
 
             {!loading && (
                 <>
-                    {/* Tab 0 - GROUP BY + HAVING */}
                     <TabPanel value={tab} index={0}>
                         <ReportTable
                             keyField="mes"
@@ -119,7 +114,6 @@ export default function Reportes() {
                         />
                     </TabPanel>
 
-                    {/* Tab 1 - CTE */}
                     <TabPanel value={tab} index={1}>
                         <ReportTable
                             keyField="producto"
@@ -134,7 +128,6 @@ export default function Reportes() {
                         />
                     </TabPanel>
 
-                    {/* Tab 2 - JOIN múltiple */}
                     <TabPanel value={tab} index={2}>
                         <ReportTable
                             keyField="cliente"
@@ -147,19 +140,15 @@ export default function Reportes() {
                         />
                     </TabPanel>
 
-                    {/* Tab 3 - JOIN con filtro por periodo */}
                     <TabPanel value={tab} index={3}>
                         <Box sx={{ display: 'flex', gap: 2, mb: 3, alignItems: 'center' }}>
                             <TextField label="Desde" type="date" value={desde}
                                 onChange={e => setDesde(e.target.value)}
-                                InputLabelProps={{ shrink: true }} size="small"
-                                sx={{ '& .MuiOutlinedInput-root': { color: '#FFFBDB', '& fieldset': { borderColor: '#ABA9C3' } }, '& .MuiInputLabel-root': { color: '#ABA9C3' } }} />
+                                InputLabelProps={{ shrink: true }} size="small" />
                             <TextField label="Hasta" type="date" value={hasta}
                                 onChange={e => setHasta(e.target.value)}
-                                InputLabelProps={{ shrink: true }} size="small"
-                                sx={{ '& .MuiOutlinedInput-root': { color: '#FFFBDB', '& fieldset': { borderColor: '#ABA9C3' } }, '& .MuiInputLabel-root': { color: '#ABA9C3' } }} />
-                            <Button variant="contained" onClick={buscarPeriodo}
-                                sx={{ bgcolor: '#09814A', '&:hover': { bgcolor: '#076e3e' } }}>
+                                InputLabelProps={{ shrink: true }} size="small" />
+                            <Button variant="contained" onClick={buscarPeriodo}>
                                 Buscar
                             </Button>
                         </Box>
@@ -178,9 +167,8 @@ export default function Reportes() {
                         )}
                     </TabPanel>
 
-                    {/* Tab 4 - VIEW */}
                     <TabPanel value={tab} index={4}>
-                        <Typography variant="body2" sx={{ color: '#ABA9C3', mb: 2 }}>
+                        <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
                             Datos obtenidos desde la vista <code>vista_ventas_detalladas</code>
                         </Typography>
                         <ReportTable
@@ -199,9 +187,8 @@ export default function Reportes() {
                         />
                     </TabPanel>
 
-                    {/* Tab 5 - Subquery IN */}
                     <TabPanel value={tab} index={5}>
-                        <Typography variant="body2" sx={{ color: '#ABA9C3', mb: 2 }}>
+                        <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
                             Clientes que han comprado guitarras — consulta con subquery <code>IN</code>
                         </Typography>
                         <ReportTable
@@ -216,9 +203,8 @@ export default function Reportes() {
                         />
                     </TabPanel>
 
-                    {/* Tab 6 - Subquery EXISTS */}
                     <TabPanel value={tab} index={6}>
-                        <Typography variant="body2" sx={{ color: '#ABA9C3', mb: 2 }}>
+                        <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
                             Productos que nunca han sido vendidos — consulta con <code>NOT EXISTS</code>
                         </Typography>
                         <ReportTable

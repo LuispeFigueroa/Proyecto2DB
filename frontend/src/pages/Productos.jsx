@@ -5,6 +5,7 @@ import {
     DialogTitle, DialogContent, DialogActions, TextField,
     Alert, Snackbar, IconButton, Chip
 } from '@mui/material'
+import { alpha } from '@mui/material/styles'
 import AddIcon from '@mui/icons-material/Add'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -50,12 +51,11 @@ export default function Productos() {
     }
 
     const handleClose = () => { setOpen(false); setError('') }
-
     const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value })
 
     const handleSubmit = async () => {
         if (!form.nombre || !form.precio || !form.stock || !form.id_categoria || !form.id_proveedor) {
-            setError('Todos los campos obligatorios deben completarse')
+            setError('Completa todos los campos obligatorios')
             return
         }
         try {
@@ -87,28 +87,34 @@ export default function Productos() {
             setSuccess('Producto eliminado')
             fetchProductos()
         } catch {
-            setError('Error al eliminar')
+            setError('Error al eliminar — puede tener ventas asociadas')
         }
     }
 
     return (
         <Box>
+            {/* Header */}
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-                <Typography variant="h5" sx={{ color: '#FFFBDB', fontWeight: 700 }}>
-                    🎸 Productos
-                </Typography>
-                <Button variant="contained" startIcon={<AddIcon />} onClick={() => handleOpen()}
-                    sx={{ bgcolor: '#09814A', '&:hover': { bgcolor: '#076e3e' } }}>
-                    Nuevo Producto
+                <Box>
+                    <Typography variant="h5" sx={{ color: 'text.primary', fontWeight: 500 }}>
+                        Productos
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: 'secondary.main', fontWeight: 500, mt: 0.5 }}>
+                        {productos.length} productos en inventario
+                    </Typography>
+                </Box>
+                <Button variant="contained" startIcon={<AddIcon />} onClick={() => handleOpen()} sx={{ borderRadius: 2 }}>
+                    Nuevo producto
                 </Button>
             </Box>
 
-            <TableContainer component={Paper} sx={{ bgcolor: '#1a1e22' }}>
+            {/* Tabla */}
+            <TableContainer component={Paper} elevation={0} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 3 }}>
                 <Table>
                     <TableHead>
                         <TableRow>
-                            {['ID', 'Nombre', 'Descripción', 'Precio', 'Stock', 'Categoría', 'Proveedor', 'Acciones'].map(h => (
-                                <TableCell key={h} sx={{ color: '#ABA9C3', fontWeight: 700, borderBottom: '1px solid #09814A' }}>
+                            {['#', 'Nombre', 'Categoría', 'Proveedor', 'Precio', 'Stock', ''].map(h => (
+                                <TableCell key={h} sx={{ fontWeight: 500, fontSize: 12 }}>
                                     {h}
                                 </TableCell>
                             ))}
@@ -116,29 +122,42 @@ export default function Productos() {
                     </TableHead>
                     <TableBody>
                         {productos.map(p => (
-                            <TableRow key={p.id_producto} sx={{ '&:hover': { bgcolor: '#1f2428' } }}>
-                                <TableCell sx={{ color: '#ABA9C3' }}>{p.id_producto}</TableCell>
-                                <TableCell sx={{ color: '#FFFBDB' }}>{p.nombre}</TableCell>
-                                <TableCell sx={{ color: '#ABA9C3', maxWidth: 200 }}>{p.descripcion}</TableCell>
-                                <TableCell sx={{ color: '#DA7422', fontWeight: 700 }}>Q{parseFloat(p.precio).toFixed(2)}</TableCell>
+                            <TableRow key={p.id_producto} sx={{ '&:hover': { bgcolor: 'action.hover' } }}>
+                                <TableCell sx={{ fontSize: 13 }}>
+                                    {String(p.id_producto).padStart(3, '0')}
+                                </TableCell>
+                                <TableCell>
+                                    <Typography sx={{ color: 'text.primary', fontSize: 13, fontWeight: 500 }}>
+                                        {p.nombre}
+                                    </Typography>
+                                    <Typography sx={{ color: 'text.secondary', fontSize: 11 }}>
+                                        {p.descripcion?.substring(0, 40)}{p.descripcion?.length > 40 ? '...' : ''}
+                                    </Typography>
+                                </TableCell>
+                                <TableCell sx={{ fontSize: 13 }}>{p.categoria}</TableCell>
+                                <TableCell sx={{ fontSize: 13 }}>{p.proveedor}</TableCell>
+                                <TableCell sx={{ color: 'warning.main', fontWeight: 500, fontSize: 13 }}>
+                                    Q{parseFloat(p.precio).toFixed(2)}
+                                </TableCell>
                                 <TableCell>
                                     <Chip
-                                        label={p.stock}
+                                        label={`${p.stock} unid.`}
                                         size="small"
                                         sx={{
-                                            bgcolor: p.stock > 5 ? '#09814A22' : '#DA742222',
-                                            color: p.stock > 5 ? '#09814A' : '#DA7422',
-                                            border: `1px solid ${p.stock > 5 ? '#09814A' : '#DA7422'}`
+                                            bgcolor: p.stock > 5 ? alpha('#2e7d32', 0.1) : alpha('#F6AE2D', 0.15),
+                                            color: p.stock > 5 ? 'success.main' : 'warning.main',
+                                            border: `0.5px solid ${p.stock > 5 ? alpha('#2e7d32', 0.3) : alpha('#F6AE2D', 0.4)}`,
+                                            fontSize: 11,
                                         }}
                                     />
                                 </TableCell>
-                                <TableCell sx={{ color: '#ABA9C3' }}>{p.categoria}</TableCell>
-                                <TableCell sx={{ color: '#ABA9C3' }}>{p.proveedor}</TableCell>
-                                <TableCell>
-                                    <IconButton onClick={() => handleOpen(p)} sx={{ color: '#ABA9C3', '&:hover': { color: '#09814A' } }}>
+                                <TableCell align="right">
+                                    <IconButton onClick={() => handleOpen(p)} size="small"
+                                        sx={{ mr: 0.5, '&:hover': { color: 'primary.main' } }}>
                                         <EditIcon fontSize="small" />
                                     </IconButton>
-                                    <IconButton onClick={() => handleDelete(p.id_producto)} sx={{ color: '#ABA9C3', '&:hover': { color: '#DA7422' } }}>
+                                    <IconButton onClick={() => handleDelete(p.id_producto)} size="small"
+                                        sx={{ '&:hover': { color: 'error.main' } }}>
                                         <DeleteIcon fontSize="small" />
                                     </IconButton>
                                 </TableCell>
@@ -148,48 +167,34 @@ export default function Productos() {
                 </Table>
             </TableContainer>
 
-            {/* Modal crear/editar */}
-            <Dialog open={open} onClose={handleClose} PaperProps={{ sx: { bgcolor: '#1a1e22', minWidth: 400 } }}>
-                <DialogTitle sx={{ color: '#FFFBDB' }}>
-                    {editing ? 'Editar Producto' : 'Nuevo Producto'}
+            {/* Modal */}
+            <Dialog open={open} onClose={handleClose}
+                PaperProps={{ sx: { borderRadius: 3, minWidth: 420 } }}>
+                <DialogTitle sx={{ fontWeight: 500, pb: 1 }}>
+                    {editing ? 'Editar producto' : 'Nuevo producto'}
                 </DialogTitle>
-                <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 2 }}>
-                    {error && <Alert severity="error">{error}</Alert>}
-                    {[
-                        { name: 'nombre', label: 'Nombre *' },
-                        { name: 'descripcion', label: 'Descripción' },
-                        { name: 'precio', label: 'Precio *', type: 'number' },
-                        { name: 'stock', label: 'Stock *', type: 'number' },
-                        { name: 'id_categoria', label: 'ID Categoría *', type: 'number' },
-                        { name: 'id_proveedor', label: 'ID Proveedor *', type: 'number' },
-                    ].map(field => (
-                        <TextField
-                            key={field.name}
-                            name={field.name}
-                            label={field.label}
-                            type={field.type || 'text'}
-                            value={form[field.name]}
-                            onChange={handleChange}
-                            variant="outlined"
-                            size="small"
-                            sx={{
-                                '& .MuiOutlinedInput-root': { color: '#FFFBDB', '& fieldset': { borderColor: '#ABA9C3' }, '&:hover fieldset': { borderColor: '#09814A' } },
-                                '& .MuiInputLabel-root': { color: '#ABA9C3' },
-                            }}
-                        />
-                    ))}
+                <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: '12px !important' }}>
+                    {error && <Alert severity="error" sx={{ borderRadius: 2 }}>{error}</Alert>}
+                    <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
+                        <TextField name="nombre" label="Nombre *" value={form.nombre} onChange={handleChange} size="small" sx={{ gridColumn: '1 / -1' }} />
+                        <TextField name="descripcion" label="Descripción" value={form.descripcion} onChange={handleChange} size="small" multiline rows={2} sx={{ gridColumn: '1 / -1' }} />
+                        <TextField name="precio" label="Precio *" type="number" value={form.precio} onChange={handleChange} size="small" />
+                        <TextField name="stock" label="Stock *" type="number" value={form.stock} onChange={handleChange} size="small" />
+                        <TextField name="id_categoria" label="ID Categoría *" type="number" value={form.id_categoria} onChange={handleChange} size="small" />
+                        <TextField name="id_proveedor" label="ID Proveedor *" type="number" value={form.id_proveedor} onChange={handleChange} size="small" />
+                    </Box>
                 </DialogContent>
-                <DialogActions sx={{ p: 2 }}>
-                    <Button onClick={handleClose} sx={{ color: '#ABA9C3' }}>Cancelar</Button>
-                    <Button onClick={handleSubmit} variant="contained"
-                        sx={{ bgcolor: '#09814A', '&:hover': { bgcolor: '#076e3e' } }}>
+                <DialogActions sx={{ p: 2, pt: 1, gap: 1 }}>
+                    <Button onClick={handleClose} sx={{ color: 'text.secondary', borderRadius: 2 }}>Cancelar</Button>
+                    <Button onClick={handleSubmit} variant="contained" sx={{ borderRadius: 2 }}>
                         {editing ? 'Actualizar' : 'Crear'}
                     </Button>
                 </DialogActions>
             </Dialog>
 
-            <Snackbar open={!!success} autoHideDuration={3000} onClose={() => setSuccess('')}>
-                <Alert severity="success">{success}</Alert>
+            <Snackbar open={!!success} autoHideDuration={3000} onClose={() => setSuccess('')}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+                <Alert severity="success" sx={{ borderRadius: 2 }}>{success}</Alert>
             </Snackbar>
         </Box>
     )

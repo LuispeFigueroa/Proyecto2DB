@@ -1,6 +1,5 @@
 import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material'
 import { Link, useLocation } from 'react-router-dom'
-import MusicNoteIcon from '@mui/icons-material/MusicNote'
 import HomeIcon from '@mui/icons-material/Home'
 
 export default function Navbar() {
@@ -15,15 +14,14 @@ export default function Navbar() {
     ]
 
     return (
-        <AppBar position="fixed" sx={{ bgcolor: '#1a1e22', borderBottom: '1px solid #09814A' }}>
+        <AppBar position="fixed">
             <Toolbar>
                 <Box
                     component={Link}
                     to="/"
                     sx={{ display: 'flex', alignItems: 'center', gap: 1, textDecoration: 'none', flexGrow: 1 }}
                 >
-
-                    <Typography variant="h6" sx={{ color: '#FFFBDB', fontWeight: 700 }}>
+                    <Typography variant="h6" sx={{ color: 'common.white', fontWeight: 700 }}>
                         Tienda Musical
                     </Typography>
                 </Box>
@@ -36,8 +34,8 @@ export default function Navbar() {
                             to={link.to}
                             startIcon={link.icon || null}
                             sx={{
-                                color: location.pathname === link.to ? '#09814A' : '#ABA9C3',
-                                '&:hover': { color: '#FFFBDB', bgcolor: '#09814A22' }
+                                color: location.pathname === link.to ? 'secondary.main' : 'rgba(255,255,255,0.75)',
+                                '&:hover': { color: 'common.white', bgcolor: 'rgba(255,255,255,0.12)' },
                             }}
                         >
                             {link.label}
